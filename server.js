@@ -11,8 +11,8 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-// app.use("/api/auth", require("./src/routes/authRoutes"));
-// app.use("/api/expenses", require("./src/routes/expenseRoutes"));
+app.use("/api/auth", require("./src/routes/authRoutes"));
+app.use("/api/expenses", require("./src/routes/expenseRoutes"));
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
