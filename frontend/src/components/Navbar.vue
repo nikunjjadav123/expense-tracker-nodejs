@@ -14,17 +14,29 @@
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/expenses">Expenses</router-link>
-          </li>
+          <!-- ✅ Show these ONLY when user IS logged in -->
+          <template v-if="isLoggedIn">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/expenses">Expenses</router-link>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-danger btn-sm ms-3" @click="logout">Logout</button>
+            </li>
+          </template>
 
-          <!-- ✅ Logout Button -->
-          <li class="nav-item">
-            <button class="btn btn-danger btn-sm ms-3" @click="logout">Logout</button>
-          </li>
+          <!-- ✅ Show this ONLY when user is NOT logged in -->
+          <template v-else>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/">Login</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/register">Register</router-link>
+            </li>
+          </template>
+
         </ul>
       </div>
     </div>
@@ -33,17 +45,23 @@
 
 <script>
 import { useAuthStore } from "../store/auth";
-
+import { computed } from "vue";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 export default {
   setup() {
     const auth = useAuthStore();
+    const { token } = storeToRefs(auth);
+    const router = useRouter();
+    const isLoggedIn = computed(() => token.value !== null);
 
     const logout = () => {
-      auth.logout();          // ✅ Removes token
-      window.location.href = "/"; // ✅ Redirect to Login
+      auth.logout();
+      router.push("/");
     };
 
-    return { logout };
+    return { isLoggedIn, logout };
   }
 };
 </script>
+

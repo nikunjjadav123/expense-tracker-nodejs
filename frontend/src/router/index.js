@@ -7,8 +7,8 @@ import Expenses from "../pages/Expenses.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: "/", component: Login },
-    { path: "/register", component: Register, meta: { requiresAuth: true } },
+    { path: "/", component: Login, meta: { guestOnly: true }  },
+    { path: "/register", component: Register},
     { path: "/dashboard", component: Dashboard, meta: { requiresAuth: true } },
     { path: "/expenses", component: Expenses, meta: { requiresAuth: true } },
   ],
@@ -23,7 +23,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !auth.token) {
     // ✅ Not logged in → redirect to login
     next("/");
-  } else {
+  }else if (to.meta.guestOnly && auth.token) {
+    next("/dashboard");
+  }  else {
     // ✅ Logged in OR route doesn't require auth
     next();
   }
