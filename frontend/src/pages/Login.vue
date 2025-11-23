@@ -56,7 +56,6 @@ export default {
 
         // ✅ Save token
         useAuthStore().setToken(res.data.token);
-
         // ✅ Redirect to dashboard
         this.$router.push("/dashboard");
       } catch (err) {
