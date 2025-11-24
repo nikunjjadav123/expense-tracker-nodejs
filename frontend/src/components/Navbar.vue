@@ -1,7 +1,8 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <router-link class="navbar-brand" to="/dashboard">Expense Tracker</router-link>
+      <!-- <router-link class="navbar-brand" to="/dashboard">Expense Tracker</router-link> -->
+       <img :src="logo" alt="Expense Tracker Logo" class="app-logo" />
 
       <button
         class="navbar-toggler"
@@ -48,6 +49,9 @@ import { useAuthStore } from "../store/auth";
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import logo from "../assets/logo.png";
+
+
 export default {
   setup() {
     const auth = useAuthStore();
@@ -60,8 +64,18 @@ export default {
       router.push("/");
     };
 
-    return { isLoggedIn, logout };
+    return { isLoggedIn, logout , logo };
   }
 };
 </script>
+<style  scoped>
+.app-logo {
+  height: 70px;          /* Increase size */
+  width: auto;           /* Keep aspect ratio */
+  margin-left: 20px;     /* Add spacing from edge */
+  object-fit: cover;  
+  filter: brightness(1.2);
+}
+
+</style>
 
