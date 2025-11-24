@@ -47,6 +47,9 @@
         Don't have an account?
         <router-link to="/register">Register</router-link>
       </p>
+      <!-- <p class="text-center mt-3">
+        <router-link to="/forgot-password">Forgot password?</router-link>
+      </p> -->
     </div>
   </div>
 </template>

@@ -36,6 +36,15 @@
             <li class="nav-item">
               <router-link class="nav-link" to="/register">Register</router-link>
             </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/about">About</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/contact-us">Contact Us</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/privacy-policy">Privacy Policy</router-link>
+            </li>
           </template>
 
         </ul>
