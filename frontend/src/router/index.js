@@ -3,10 +3,12 @@ import Login from "../pages/Login.vue";
 import Register from "../pages/Register.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import Expenses from "../pages/Expenses.vue";
+import Categories from "../pages/Categories.vue";
 import ForgotPassword from "../pages/ForgotPassword.vue";
 import About from '../pages/About.vue';
 import Contact from '../pages/Contact.vue';
 import Privacy from '../pages/Privacy.vue';
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -16,6 +18,7 @@ const router = createRouter({
     { path: "/forgot-password", component: ForgotPassword},
     { path: "/dashboard", component: Dashboard, meta: { requiresAuth: true } },
     { path: "/expenses", component: Expenses, meta: { requiresAuth: true } },
+    { path: '/categories', component: Categories, meta: { requiresAuth: true } },
     { path: "/about", component: About },
     { path: "/contact-us", component: Contact },
     { path: "/privacy-policy", component: Privacy },

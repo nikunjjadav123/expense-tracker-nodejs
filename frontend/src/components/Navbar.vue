@@ -24,6 +24,18 @@
               <router-link class="nav-link" to="/expenses">Expenses</router-link>
             </li>
             <li class="nav-item">
+              <router-link class="nav-link" to="/categories">Categories</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/budget">Budget</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/reports">Reports</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/profile">Profile</router-link>
+            </li>
+            <li class="nav-item">
               <button class="btn btn-danger btn-sm ms-3" @click="logout">Logout</button>
             </li>
           </template>
