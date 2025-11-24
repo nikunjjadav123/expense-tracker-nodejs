@@ -27,13 +27,20 @@
 
       <div class="mb-3">
         <label class="form-label">Category</label>
-        <input
+        <!-- <input
           v-model="category"
           type="text"
           class="form-control"
           placeholder="Enter category"
           required
-        />
+        /> -->
+        <select v-model="category" class="form-control" required>
+          <option value="" disabled>Select Category</option>
+          <option v-for="cat in categories" :key="cat._id" :value="cat._id">
+            {{ cat.name }}
+          </option>
+        </select>
+
       </div>
 
       <button type="submit" class="btn btn-primary w-100">
@@ -45,14 +52,19 @@
 
 <script>
 import { addExpense } from "../services/expenseService";
-
+import { getCategories } from "../services/categoryService";
 export default {
   data() {
     return {
       title: "",
       amount: "",
-      category: ""
+      category: "",
+      categories: []
     };
+  },
+  async mounted() {
+    const res = await getCategories();
+    this.categories = res.data;
   },
   methods: {
     async save() {
