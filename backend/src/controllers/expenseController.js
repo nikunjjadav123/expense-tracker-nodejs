@@ -1,7 +1,7 @@
 const Expense = require("../models/Expense");
 
 exports.getExpenses = async (req, res) => {
-  const expenses = await Expense.find({ user: req.user._id });
+  const expenses = await Expense.find({ user: req.user._id }).populate("category", "name");
   res.json(expenses);
 };
 

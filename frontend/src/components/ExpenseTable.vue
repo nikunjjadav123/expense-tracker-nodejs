@@ -14,7 +14,7 @@
         <tr v-for="item in expenses" :key="item._id">
           <td>{{ item.title }}</td>
           <td>₹ {{ item.amount }}</td>
-          <td>{{ item.category }}</td>
+          <td>{{ item.category.name }}</td>
           <td class="text-center">
             <button
               class="btn btn-danger btn-sm"

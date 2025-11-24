@@ -8,5 +8,5 @@ const expenseSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
 });
 
-const Expense = mongoose.model('Expense_nodejs', expenseSchema);
+const Expense = mongoose.model('Expenses', expenseSchema);
 module.exports = Expense;
