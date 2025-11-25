@@ -1,4 +1,6 @@
 const Expense = require("../models/Expense");
+const Budget = require("../models/Budget");
+const { getMonthRange } = require("../helpers/dateRange");
 
 exports.getExpenses = async (req, res) => {
   const expenses = await Expense.find({ user: req.user._id }).populate("category", "name");
@@ -32,7 +34,57 @@ exports.createExpense = async (req, res) => {
       user: req.user._id
     });
 
-    res.status(201).json(expense);
+    const expenseDate = expense.date || new Date();
+    const year = expenseDate.getFullYear();
+    const month = expenseDate.getMonth() + 1;
+
+    const budget = await Budget.findOne({ user: req.user._id, year, month });
+
+    if(!budget) {
+      return res.status(201).json({expense, budget: null, alert: null }); // No budget set, skip further checks
+    }
+
+    const { start, end } = getMonthRange(year, month);
+    const expenses = await Expenses.aggregate([
+      {
+        $match: {
+          user: req.user._id,
+          date: { $gte: start, $lte: end }
+        }
+      },{
+        $group: { _id: null, total: { $sum: "$amount" } }
+      }
+    ]);
+
+    const totalSpent = expenses.length ? expenses[0].total : 0;
+    const percentUsed = budget.limit > 0 ? (totalSpent / budget.limit) * 100 : 0;
+    let alert = null;
+    
+    if (percentUsed >= 100) {
+      alert = {
+        level: "danger",
+        message: `You have exceeded your monthly budget. Used ${percentUsed.toFixed(
+          0
+        )}% of ₹${budget.limit}.`
+      };
+    } else if (percentUsed >= 80) {
+      alert = {
+        level: "warning",
+        message: `You have used ${percentUsed.toFixed(
+          0
+        )}% of your monthly budget of ₹${budget.limit}.`
+      };
+    }
+
+    res.json({
+      expense,
+      budget: {
+        limit: budget.limit,
+        totalSpent,
+        percentUsed: Number(percentUsed.toFixed(0))
+      },
+      alert
+    });
 
   } catch (error) {
     console.log(error);
