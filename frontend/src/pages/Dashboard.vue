@@ -82,64 +82,61 @@
 
 <script>
 import { getExpenses } from "../services/expenseService";
+import { getCurrentBudget } from "../services/budgetService";
 
 export default {
   data() {
     return {
       expenses: [],
-      budgetLimit: 10000 // ✅ Change this to set your budget
+      budgetLimit: 0
     };
   },
 
   async mounted() {
+    // Load expenses
     const res = await getExpenses();
     this.expenses = res.data;
+
+    // Load current month budget (dynamic)
+    const budgetRes = await getCurrentBudget();
+    console.log("Budget Response:", budgetRes.data);
+
+    this.budgetLimit = budgetRes.data.limit || 0;
   },
 
   computed: {
-    // ✅ Total count of expenses
     totalExpenses() {
       return this.expenses.length;
     },
-
-    // ✅ Total unique categories
     categoriesCount() {
       const unique = new Set(this.expenses.map(e => e.category));
       return unique.size;
-    }
-
-,
-
-    // ✅ Total spending amount
+    },
     totalAmount() {
       return this.expenses.reduce(
         (sum, e) => sum + Number(e.amount || 0),
         0
       );
     },
-
-    // ✅ % of budget used (max 100)
     budgetPercent() {
+      if (!this.budgetLimit) return 0;
       return Math.min(
         Math.round((this.totalAmount / this.budgetLimit) * 100),
         100
       );
     },
-
-    // ✅ Progress bar color
     progressBarClass() {
-      if (this.budgetPercent < 50) return "bg-success";   // Green
-      if (this.budgetPercent < 80) return "bg-warning";   // Yellow
-      return "bg-danger";                                  // Red
+      if (this.budgetPercent < 50) return "bg-success";
+      if (this.budgetPercent < 80) return "bg-warning";
+      return "bg-danger";
     },
-
-    // ✅ Is budget exceeded?
     isOverBudget() {
       return this.totalAmount > this.budgetLimit;
     }
   }
 };
 </script>
+
 
 <style>
 .card-title {

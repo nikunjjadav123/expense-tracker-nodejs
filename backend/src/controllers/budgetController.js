@@ -1,7 +1,7 @@
 // controllers/budgetController.js
 const Budget = require("../models/Budget");
 const Expense = require("../models/Expense");
-const { getMonthRange } = require("../helpers/dateRange"); // if you created helper
+const { getDateRangeOfMonth } = require("../helpers/dateRange"); // if you created helper
 
 // POST /api/budgets
 // body: { year, month, limit }
@@ -40,7 +40,7 @@ exports.getCurrentMonthBudget = async (req, res) => {
       return res.json({ hasBudget: false });
     }
 
-    const { start, end } = getMonthRange(year, month);
+    const { start, end } = getDateRangeOfMonth(year, month);
 
     const expenses = await Expense.aggregate([
       {
