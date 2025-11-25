@@ -8,7 +8,7 @@ import ForgotPassword from "../pages/ForgotPassword.vue";
 import About from '../pages/About.vue';
 import Contact from '../pages/Contact.vue';
 import Privacy from '../pages/Privacy.vue';
-
+import Budget from '../pages/Budget.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -19,6 +19,7 @@ const router = createRouter({
     { path: "/dashboard", component: Dashboard, meta: { requiresAuth: true } },
     { path: "/expenses", component: Expenses, meta: { requiresAuth: true } },
     { path: '/categories', component: Categories, meta: { requiresAuth: true } },
+    { path: "/budget", component: Budget, meta: { requiresAuth: true } },
     { path: "/about", component: About },
     { path: "/contact-us", component: Contact },
     { path: "/privacy-policy", component: Privacy },

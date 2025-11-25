@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const { createBudget, getCurrentMonthBudget } = require("../controllers/budgetController");
-const auth = require("../middleware/auth");
+const auth = require("../middleware/authMiddleware");
 
 // Set / update monthly budget
 router.post("/", auth, createBudget);
