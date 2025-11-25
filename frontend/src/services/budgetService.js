@@ -8,3 +8,7 @@ export function setBudget({ year, month, limit }) {
 export function getCurrentBudget() {
   return api.get("/budgets/current");
 }
+
+export function getAllBudgets() {
+  return api.get("/budgets/all");
+}

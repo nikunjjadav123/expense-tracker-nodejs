@@ -70,3 +70,13 @@ exports.getCurrentMonthBudget = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+exports.AllBudgets = async (req, res) => {
+  try {
+    const budgets = await Budget.find({ user: req.user._id }).sort({ year: -1, month: -1 });
+    res.json(budgets);
+  } catch (err) {
+    console.error("Error getting all budgets:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};

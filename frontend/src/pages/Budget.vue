@@ -11,30 +11,46 @@
       </div>
     </div>
 
-    <!-- Show only when budget exists -->
-    <div v-if="budget && budget.hasBudget" class="alert alert-info mt-3">
-      <div><strong>Current Month:</strong> {{ budget.month }} {{ budget.year }}</div>
-      <div><strong>Limit:</strong> ₹{{ budget.limit }}</div>
-      <div><strong>Spent:</strong> ₹{{ budget.totalSpent }}</div>
-      <div><strong>Used:</strong> {{ budget.percentUsed }}%</div>
-    </div>
+    <!-- All budgets table -->
+    <table class="table table-bordered mt-4">
+      <thead class="table-dark">
+        <tr>
+          <th>Month</th>
+          <th>Year</th>
+          <th>Limit (₹)</th>
+        </tr>
+      </thead>
 
-    <div v-else class="text-muted">
-      No budget set for this month.
-    </div>
+      <tbody>
+        <tr v-for="b in budgets" :key="b._id" :class="{ 'table-success': isCurrentMonth(b) }">
+          <td>{{ monthName(b.month) }}</td>
+          <td>{{ b.year }}</td>
+          <td>₹ {{ b.limit }}</td>
+        </tr>
+
+        <tr v-if="budgets.length === 0">
+          <td colspan="3" class="text-center text-muted py-3">
+            No budgets found.
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
-import { getCurrentBudget } from "../services/budgetService";
+import { getAllBudgets } from "../services/budgetService";
 import BudgetForm from "../components/BudgetForm.vue";
 
 export default {
   components: { BudgetForm },
-  
+
   data() {
+    const now = new Date();
     return {
-      budget: null
+      budgets: [],   // 🔥 Array
+      currentMonth: now.getMonth() + 1,
+      currentYear: now.getFullYear()
     };
   },
 
@@ -43,10 +59,18 @@ export default {
   },
 
   methods: {
-      async loadData() {
-        const res = await getCurrentBudget();
-        this.budget = res.data;
+    async loadData() {
+      const res = await getAllBudgets();
+      this.budgets = res.data;     // 🔥 Save array
+    },
+    isCurrentMonth(budget) {
+      return budget.month === this.currentMonth && budget.year === this.currentYear;
+    },
+    monthName(m) {
+      return new Date(2000, m - 1, 1).toLocaleString("en", {
+        month: "long"
+      });
     }
-  } 
+  }
 };
 </script>
