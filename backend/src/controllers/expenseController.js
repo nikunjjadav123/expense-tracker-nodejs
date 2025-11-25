@@ -1,6 +1,6 @@
 const Expense = require("../models/Expense");
 const Budget = require("../models/Budget");
-const { getMonthRange } = require("../helpers/dateRange");
+const { getDateRangeOfMonth } = require("../helpers/dateRange");
 
 exports.getExpenses = async (req, res) => {
   const expenses = await Expense.find({ user: req.user._id }).populate("category", "name");
@@ -43,9 +43,8 @@ exports.createExpense = async (req, res) => {
     if(!budget) {
       return res.status(201).json({expense, budget: null, alert: null }); // No budget set, skip further checks
     }
-
-    const { start, end } = getMonthRange(year, month);
-    const expenses = await Expenses.aggregate([
+    const { start, end } = getDateRangeOfMonth(year, month);
+    const expenses = await Expense.aggregate([
       {
         $match: {
           user: req.user._id,
@@ -75,9 +74,11 @@ exports.createExpense = async (req, res) => {
         )}% of your monthly budget of ₹${budget.limit}.`
       };
     }
+    const fullExpense = await Expense.findById(expense._id)
+  .populate("category", "name");
 
     res.json({
-      expense,
+      expense: fullExpense,
       budget: {
         limit: budget.limit,
         totalSpent,

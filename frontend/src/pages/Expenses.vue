@@ -10,7 +10,7 @@
         Add New Expense
       </div>
       <div class="card-body">
-        <ExpenseForm @saved="loadData" />
+        <ExpenseForm @saved="addExpenseToList" />
       </div>
     </div>
 
@@ -40,23 +40,31 @@ import ExpenseTable from "../components/ExpenseTable.vue";
 
 export default {
   components: { ExpenseForm, ExpenseTable },
+
   data() {
     return {
-      expenses: [],
+      expenses: []
     };
   },
+
   async mounted() {
     this.loadData();
   },
+
   methods: {
     async loadData() {
       const res = await getExpenses();
       this.expenses = res.data;
     },
+
+    addExpenseToList(newExpense) {
+      this.expenses.push(newExpense);   // 🔥 LIVE update
+    },
+
     async deleteExpense(id) {
       await remove(id);
-      this.loadData();
-    },
-  },
+      this.expenses = this.expenses.filter(e => e._id !== id);
+    }
+  }
 };
 </script>
